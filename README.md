@@ -2,7 +2,7 @@
 >>script Python permettant d’aspirer (collecter) les entités médicales de type noms de médicaments par substance active 
 de A à Z, à partir des 26 pages HTML du dossier <<VIDAL>>
 
->>Générer en sortie un dictionnaire au format .dic (format DELAF vu en cours 3) encodé en UTF-16 LE avec BOM (UCS-2 LE BOM). 
+>>Générer en sortie un dictionnaire au format .dic encodé en UTF-16 LE avec BOM (UCS-2 LE BOM). 
 >>Chaque entrée lexicale de ce dictionnaire doit être suivie par les informations (codes) ,.N+subst
 >> Donner la possibilité à l’utilisateur de déterminer l’intervalle des pages à traiter, en respectant le format : 
 B-H, E-S ou A-W, etc. Cet intervalle est le premier argument du premier script Python (voir « projet_1.pdf »). 
