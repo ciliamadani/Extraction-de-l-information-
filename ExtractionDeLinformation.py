@@ -1,16 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
-
-
 from bs4 import BeautifulSoup
 import requests
 import re
-
-
-# In[7]:
-
 
 lettres=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 bonInterval = False
@@ -41,10 +34,6 @@ file = open("subs.dic","w",encoding="utf-16")
 
 file2 = open("infos.txt","w",encoding="utf-8")
 
-
-# In[8]:
-
-
 page_link = 'https://www.vidal.fr/Sommaires/Substances-&.htm'
 #Modifier l'url selon la plage des valeurs voulue 
 cpt2=0
@@ -65,29 +54,7 @@ for i in range (len(subLettres)):
 file2.write("Le nombre total d'entites medicales par substance active est: "+str(cpt2))
 file.close()
 file2.close()
-
-
-# In[92]:
-
-
-corpusMedical = open("C://Users//ezi//Desktop//L3//Extraction//corpusMedical_utf8.txt",'r',encoding="utf-8")
-enriFile  =open("subst_enri.dic",'w',encoding="utf-16")
-#Preparer les expresssions regulieres
-import re     #traitement par(([A-Z]([a-z]*\S,))*|([A-Z][a-z])*)
-#traitement par (([A-Z][a-z]*),)*
-#$result=re.findall("traitement par ([A-Z][a-z]{2,15})",corpusMedical.read())
-#print(result)
-
-
-
-#Traitement de sortie :
-exp3="Traitement de sortie :\n ([A-Z]){4,15}\n"
-#esult=re.findall(exp3,corpusMedical.read())
-
-#Traitement a domicile :
-exp44="(([A-Z]{4,15}) [0-9]+ lors des douleurs|([A-Z]{4,15}) et|(([A-Z]{4,15})/S?([A-Z]{4,15})?) : [0-9]+)|([A-Z]{4,15}) ([A-Z]+).: [0-9]+-"
-
-
+"""
 result  =re.findall(exp3,corpusMedical.read())
 print(result)
 
@@ -99,10 +66,7 @@ for i in range(len(result)):
             
 enriFile.close()
 enriFile  =open("subst_enri.dic",'r')
-
-
-# In[140]:
-
+"""
 
 corpusMedical = open("C://Users//ezi//Desktop//L3//Extraction//corpusMedical_utf8.txt",'r',encoding="utf-8")
 enriFile  =open("subst_enri.dic",'w',encoding="utf-16")
@@ -122,12 +86,9 @@ exp6="Type de Stomie: ([A-Z]{4,15})"
 exp7="une dose de ([A-Z]{4,15})"
 
 #Traitement par
-exp8="prévention par ([A-Za-z]{4,15})|traitement par ([A-Za-z]{4,15})|traitement par([A-Z]{4,15}-[A-Z]{5,15})|traitement par([A-Z]{4,15} [A-Z]{4,15})|traitement par([A-Z]{4,15}) et ([A-Z]{4,15})|traitement par([A-Z]{4,15}), plutôt que par ([A-z]{4,15})"
+exp8="prÃ©vention par ([A-Za-z]{4,15})|traitement par ([A-Za-z]{4,15})|traitement par([A-Z]{4,15}-[A-Z]{5,15})|traitement par([A-Z]{4,15} [A-Z]{4,15})|traitement par([A-Z]{4,15}) et ([A-Z]{4,15})|traitement par([A-Z]{4,15}), plutÃ´t que par ([A-z]{4,15})"
 exp9="traitement par ([A-Z]{4,15}), ([A-Z]{4,15}) et ([A-Z]{4,15})"
 
 exp10="[A-Z]{5,15},|[A-Z]{5,15} [0-9]"
 result=re.findall(exp7,corpusMedical.read())
 print(result)
-
-
-
