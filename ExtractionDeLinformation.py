@@ -109,41 +109,25 @@ enriFile  =open("subst_enri.dic",'w',encoding="utf-16")
 #Preparer les expresssions regulieres
 
 import re     
-exp1 = "([a-zA-Z]{5,15}) [0-9]{1,4} mg?|([a-zA-Z]{5,15}) [0-9]{1,3} g|([a-zA-Z]{5,15}) [0-9]{1,3} gr|[a-zA-Z]{5,15} [0-9],[0-9]{1,3} ml"
-#Type de Stomie: 
-exp2="([A-Za-z]{4,15})-?([A-Za-z]*) [0-9]+,?[0-9]*MG|([A-Za-z]{4,15})-?([A-Za-z]*) [0-9]+,?[0-9]*mg|([A-Za-z]{4,15})-?([A-Za-z]*) [0-9]+,?[0-9]*mL|([A-Za-z]{4,15})-?([A-Za-z]*) [0-9]+,?[0-9]*g"
+exp1 = "([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]{1,3} ?mg ?|([A-Z]{5,15}) [0-9]{2,4}\,|([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]{1,3} ?gr? ?"
+exp2 = "([A-Z]{5,15} [A-Z]{1,3}|[A-Z][a-z]{4,15} [A-Z]{1,3}) [0-9]{1,3} ?mg ?|([A-Z]{5,15} [A-Z]{1,3}|[A-Z][a-z]{4,15} [A-Z]{1,3}) [0-9]{1,3} ?gr? "
+exp3 = "([A-Z]{5,15}) [0-9]{1,3} [A-Z]{1,3} |([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]\,[0-9]{1,3} ?ml ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]\.[0-9]{1,3} ?ml ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}|[a-z]{5,15}) [0-9]\,[0-9]{1,3} ?mL ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]\.[0-9]{1,3} ?mL ?"
+exp4 = "(\w+[a-z]{5,15}-[a-z]{4,15}) [0-9]{1,3} ?g ?/[0-9]{1,3} ?mg ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}) : [0-9]{1,3} ?mg ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}) ?: ?[0-9]{1,3} ?gr? ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}) ?: ?[0-9]{1,3} ?ml ?"
 
-exp3="Type de Stomie: ([A-Z]{4,15})"
+exp5 = "(Vitamine [A-Z][0-9]{0,2}) ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}) [0-9]{1,4}\.[0,9]{1,4}\, ?|([A-Z]{5,15}|[A-Z][a-z]{4,15) [0-9]{1,4}\,[0,9]{1,4}\, ?|([A-Z]{5,15}) [0-9]{1,3} [0-9]{1,3} [0-9]{1,3} ?"
 
-exp4 = "([a-zA-Z]{5,15} [a-zA-Z]{1,3}) [0-9]{1,3} mg|([a-zA-Z]{5,15} [a-zA-Z]{1,3}) [0-9]{1,3} g|([a-zA-Z]{5,15} [a-zA-Z]{1,3}) [0-9]{1,3} gr"
-
-exp5 = "([A-Z]{5,15}) [0-9]{1,3} [A-Z]{1,3}"
-
-exp6 = "([a-z]{5,15}) [0-9],[0-9]{1,3}\s?mL|([A-Z]{5,15}) [0-9],[0-9]{1,3} ml|([A-Z]{5,15}) [0-9],[0-9]{1,3} mL"
-
-exp7 = "(\w+[a-z]{5,15}-[a-z]{5,15}) [0-9]{1,3}g/[0-9]{1,3}mg|([A-Z]{5,15}) [0-9]\.[0-9]{1,3} mg|([A-Z][a-z]{5,15}) : [0-9]{1,3} mg"
-
-exp8 = "Vitamine ([A-Z][0-9]{0,2})"
+exp6="Type de Stomie: ([A-Z]{4,15})"
 
 #une dose de  ..
-exp9="une dose de ([A-Z]{4,15})"
+exp7="une dose de ([A-Z]{4,15})"
 
 #Traitement par
-exp10="prévention par ([A-Za-z]{4,15})|traitement par ([A-Za-z]{4,15})|traitement par([A-Z]{4,15}-[A-Z]{5,15})|traitement par([A-Z]{4,15} [A-Z]{4,15})|traitement par([A-Z]{4,15}) et ([A-Z]{4,15})|traitement par([A-Z]{4,15}), plutôt que par ([A-z]{4,15})"
-exp12="traitement par ([A-Z]{4,15}), ([A-Z]{4,15}) et ([A-Z]{4,15})"
+exp8="prévention par ([A-Za-z]{4,15})|traitement par ([A-Za-z]{4,15})|traitement par([A-Z]{4,15}-[A-Z]{5,15})|traitement par([A-Z]{4,15} [A-Z]{4,15})|traitement par([A-Z]{4,15}) et ([A-Z]{4,15})|traitement par([A-Z]{4,15}), plutôt que par ([A-z]{4,15})"
+exp9="traitement par ([A-Z]{4,15}), ([A-Z]{4,15}) et ([A-Z]{4,15})"
 
-exp14="[A-Z]{5,15},|[A-Z]{5,15} [0-9]"
+exp10="[A-Z]{5,15},|[A-Z]{5,15} [0-9]"
 result=re.findall(exp7,corpusMedical.read())
 print(result)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
