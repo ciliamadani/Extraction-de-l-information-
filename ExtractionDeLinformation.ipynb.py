@@ -1,9 +1,12 @@
 ﻿#!/usr/bin/env python
 # coding: utf-8
 
+
 from bs4 import BeautifulSoup
 import requests
 import re
+
+
 
 lettres=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 bonInterval = False
@@ -29,10 +32,11 @@ while ((startIndex==-1) or (endIndex==-1)):
         
 subLettres=lettres[startIndex:endIndex+1]
 
-file = open("subs.dic","w",encoding="utf-16")
-#file.write("\ufeff")
+sub = open("subs.dic","w",encoding="utf-16")
+sub.write('\ufeff \n')
 
 file2 = open("infos.txt","w",encoding="utf-8")
+
 
 page_link = 'https://www.vidal.fr/Sommaires/Substances-&.htm'
 #Modifier l'url selon la plage des valeurs voulue 
@@ -48,42 +52,22 @@ for i in range (len(subLettres)):
         for b in a.findAll("li"):
             b=b.text.strip("\n")+",.N+subst"+"\n"
             cpt=cpt+1
-            file.write(b)
+            sub.write(b)
         file2.write("Le nombres des substances actives pour la letre "+subLettres[i]+" est:"+str(cpt)+"\n")
         cpt2=cpt2+cpt
 file2.write("Le nombre total d'entites medicales par substance active est: "+str(cpt2))
-file.close()
+
 file2.close()
 
+
 import re 
-enriFile  =open("subst_enri.dic",'w',encoding="utf-16")
 
 #Preparer les expresssions regulieres
-exps=[]
-    
-exps.append ("([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]{1,3} ?mg ?|([A-Z]{5,15}) [0-9]{2,4}\,|([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]{1,3} ?gr? ?")
-
-exps.append("([A-Z]{5,15} [A-Z]{1,3}|[A-Z][a-z]{4,15} [A-Z]{1,3}) [0-9]{1,3} ?mg ?|([A-Z]{5,15} [A-Z]{1,3}|[A-Z][a-z]{4,15} [A-Z]{1,3}) [0-9]{1,3} ?gr? ")
-
-exps.append("([A-Z]{5,15}) [0-9]{1,3} [A-Z]{1,3} |([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]\,[0-9]{1,3} ?ml ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]\.[0-9]{1,3} ?ml ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}|[a-z]{5,15}) [0-9]\,[0-9]{1,3} ?mL ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}|^[a-z]{5,15}) [0-9]\.[0-9]{1,3} ?mL ?")
-
-exps.append("(\w+[a-z]{5,15}-[a-z]{4,15}) [0-9]{1,3} ?g ?/[0-9]{1,3} ?mg ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}) : [0-9]{1,3} ?mg ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}) ?: ?[0-9]{1,3} ?gr? ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}) ?: ?[0-9]{1,3} ?ml ?")
-
-exps.append("(Vitamine [A-Z][0-9]{0,2}) ?|([A-Z]{5,15}|[A-Z][a-z]{4,15}) [0-9]{1,4}\.[0,9]{1,4}\, ?|([A-Z]{5,15}|[A-Z][a-z]{4,15) [0-9]{1,4}\,[0,9]{1,4}\, ?|([A-Z]{5,15}) [0-9]{1,3} [0-9]{1,3} [0-9]{1,3} ?")
-
-exps.append("Type de Stomie: ([A-Z]{4,15})")
-
-#une dose de  ..
-exps.append("une dose de ([A-Z]{4,15})")
-
-#Traitement par
-exps.append("prévention par ([A-Za-z]{4,15})|traitement par ([A-Za-z]{4,15})|traitement par([A-Z]{4,15}-[A-Z]{5,15})|traitement par([A-Z]{4,15} [A-Z]{4,15})|traitement par([A-Z]{4,15}) et ([A-Z]{4,15})|traitement par([A-Z]{4,15}), plutôt que par ([A-z]{4,15})")
-exps.append("traitement par ([A-Z]{4,15}), ([A-Z]{4,15}) et ([A-Z]{4,15})")
-
-subst_enri= open("subst_enri.dic", "w", encoding = "utf-16")
+exp=("^-? ?(\w+) :? ?(\d+|,)+ (mg|ml).+")
+      
+subst_enri= open("subst_enri.dic","w", encoding = "utf-16")
 subst_enri.write("\ufeff")
 
-rslt =[]
 j=0
 cptTot=0
 cpts={'a':0,'b':0,'c':0,'d':0,'e':0,'f':0,'g':0,'h':0,'i':0,'j':0,'k':0,'l':0,'m':0,
@@ -93,25 +77,57 @@ cpts={'a':0,'b':0,'c':0,'d':0,'e':0,'f':0,'g':0,'h':0,'i':0,'j':0,'k':0,'l':0,'m
 def majCompteur(lettre):
     cpts[lettre.lower()]=cpts[lettre.lower()]+1
 
-for i in exps:
-    corpusMedical = open("C://Users//ezi//Desktop//L3//Extraction//corpusMedical_utf8.txt",'r',encoding="utf-8")
-    rslt.append (re.findall(i,corpusMedical.read()))
-    for m in rslt[j]:
-        for n in m:
-            if n != '':
-                cptTot = cptTot +1
-                subst_enri.write(n+",.N+subst\n")
-                #print("-"+str(cptTot)+"  "+n)
-                #Mettre a jour le compteur de la lettre
-                majCompteur(n[0])
-                
-    j=j+1     
-subst_enri.close()
+corpus = open("C://Users//ezi//Desktop//L3//Extraction//corpusMedical_utf8.txt",'r',encoding="utf-8")
+rslt=re.findall(exp, corpus.read())
 
-#Generation d'infos2
-infos2= open("infos.txt","w")
-infos2.write ("Le nombre de médicaments issus de l’enrichissement pour chaque lettre de l’alphabet: \n")
+# CAS expression retourne une liste de tuples:
+if type(m) == tuple:
+    for m in rslt:
+        if type(m) == tuple:
+            for n in m:
+                    if n != '':
+                        cptTot = cptTot + 1
+                        subst_enri.write(n + ",.N+subst\n")
+                        sub.write(n+",.N+subst\n")
+                        print("-"+str(cptTot)+"  "+n)                 
+                        # Mettre a jour le compteur de la lettre
+                        majCompteur(n[0])
+
+if type(m) == str:
+      cptTot = cptTot + 1
+      subst_enri.write(m+",.N+subst\n")
+      sub.write(m+",.N+subst\n")
+      #print("-" + str(cptTot) + "  " + m)
+      # Mettre a jour le compteur de la lettre
+      majCompteur(m[0])
+
+
+subst_enri.close()
+sub.close()
+
+# Generation d'infos2:
+inf = open("infos2.txt", "w", encoding="utf-8")
+
 for i in cpts:
-    infos2.write(i+"\t"+str(cpts[i])+'\n')
-infos2.write("Le nombre total de médicaments issus de l’enrichissement: "+str(cptTot))
-infos2.close()
+    inf.write("Le nombre de médicaments issus de l’enrichissement pour la lettre "+i.upper()+ " est:" + str(cpts[i])+"\n")
+inf.write("Le nombre total de médicaments issus de l’enrichissement: " + str(cptTot))
+inf.close()
+
+
+#elimination des doublons et tri du dictionnaire subst.dic:
+sub = open("subs.dic", "r", encoding="utf-16")
+tri = (sub.read().split("\n"))
+
+sub = open("subs.dic", "w", encoding="utf-16")
+
+txt = []
+
+for i in sorted(tri):
+    if i not in txt:
+        txt.append(i)
+
+for i in txt:
+    sub.write(i+"\n")
+sub.close()
+
+
